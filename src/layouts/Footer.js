@@ -1,3 +1,5 @@
+import { socialLinks } from "../data/navigation";
+
 const Footer = () => {
   return (
     <div className="footer">
@@ -9,15 +11,16 @@ const Footer = () => {
                 className="social-links scrolla-element-anim-1 scroll-animate"
                 data-animate="active"
               >
-                <a target="_blank" rel="nofollow" href="http://twitter.com">
-                  <i aria-hidden="true" className="fab fa-twitter" />
-                </a>
-                <a target="_blank" rel="nofollow" href="http://dribble.com">
-                  <i aria-hidden="true" className="fab fa-dribbble" />
-                </a>
-                <a target="_blank" rel="nofollow" href="http://behance.com">
-                  <i aria-hidden="true" className="fab fa-behance" />
-                </a>
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.title}
+                    target="_blank"
+                    rel="nofollow"
+                    href={social.href}
+                  >
+                    <i aria-hidden="true" className={social.icon} />
+                  </a>
+                ))}
               </div>
             </div>
             <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
@@ -25,7 +28,7 @@ const Footer = () => {
                 className="copyright-text align-center scrolla-element-anim-1 scroll-animate"
                 data-animate="active"
               >
-                © 2024 <strong>Rafi Zaman</strong>. All rights reserved
+                © 2025 <strong>Rafi Zaman</strong>. All rights reserved
               </div>
             </div>
             <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4">

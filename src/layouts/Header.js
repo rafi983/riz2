@@ -1,46 +1,40 @@
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
 import { linkClick, toggleMenu } from "../utils";
+import { menuItems, socialLinks } from "../data/navigation";
 
 const Header = () => {
-  const [day, setDay] = useState(true);
-  useEffect(() => {
-    if (day) {
-      document.querySelector("body").classList.add("light-skin");
-      document.querySelector("body").classList.remove("dark-skin");
-    } else {
-      document.querySelector("body").classList.add("dark-skin");
-    }
-  }, [day]);
+  const { day, setDay } = useContext(ThemeContext);
 
-  const [pageToggle, setPageToggle] = useState(false);
+  useEffect(() => {
+    document.body.classList.toggle("light-skin", day);
+    document.body.classList.toggle("dark-skin", !day);
+  }, [day]);
 
   return (
     <Fragment>
-      {/* Header */}
       <header className="header">
         <div className="header__builder">
           <div className="row">
             <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              {/* logo */}
               <div className="logo">
                 <Link href="/" legacyBehavior>
                   <a>
                     <img
                       width={228}
                       height={38}
-                      src="assets/images/logo2.png"
-                      alt=""
+                      src="/assets/images/logo2.png"
+                      alt="logo"
                     />
                   </a>
                 </Link>
               </div>
             </div>
             <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8 align-right">
-              {/* switcher btn */}
               <a
                 href="#"
-                className={`switcher-btn ${day ? "" : "active"}`}
+                className={`switcher-btn ${!day ? "active" : ""}`}
                 onClick={(e) => {
                   e.preventDefault();
                   setDay(!day);
@@ -79,101 +73,44 @@ const Header = () => {
                   </svg>
                 </span>
               </a>
-              {/* menu btn */}
+
               <a href="#" className="menu-btn" onClick={(e) => toggleMenu(e)}>
                 <span />
                 <span />
               </a>
-              {/* Menu Full Overlay */}
               <div className="menu-full-overlay">
                 <div className="menu-full-container">
                   <div className="container">
                     <div className="row">
                       <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        {/* menu full */}
                         <div className="menu-full">
                           <ul className="menu-full">
-                            <li className="menu-item">
-                              <Link legacyBehavior href="/">
+                            {menuItems.map((item) => (
+                              <li key={item.label} className="menu-item">
                                 <a
                                   className="splitting-text-anim-2"
                                   data-splitting="chars"
+                                  href={item.href}
+                                  onClick={linkClick}
                                 >
-                                  Home
+                                  {item.label}
                                 </a>
-                              </Link>
-                            </li>
-
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#skills-section"
-                                onClick={() => linkClick()}
-                              >
-                                Skills
-                              </a>
-                            </li>
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#works-section"
-                                onClick={() => linkClick()}
-                              >
-                                Works
-                              </a>
-                            </li>
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#resume-section"
-                                onClick={() => linkClick()}
-                              >
-                                Resume
-                              </a>
-                            </li>
-
-                            <li className="menu-item">
-                              <a
-                                className="splitting-text-anim-2"
-                                data-splitting="chars"
-                                href="/#contact-section"
-                                onClick={() => linkClick()}
-                              >
-                                Contact
-                              </a>
-                            </li>
+                              </li>
+                            ))}
                           </ul>
                         </div>
-
-                        {/* social */}
                         <div className="menu-social-links">
-                          <a
-                            href="http://dribbble.com"
-                            target="blank"
-                            className="scrolla-element-anim-1"
-                            title="dribbble"
-                          >
-                            <i className="fab fa-dribbble" />
-                          </a>
-                          <a
-                            href="http://twitter.com"
-                            target="blank"
-                            className="scrolla-element-anim-1"
-                            title="twitter"
-                          >
-                            <i className="fab fa-twitter" />
-                          </a>
-                          <a
-                            href="http://behance.com"
-                            target="blank"
-                            className="scrolla-element-anim-1"
-                            title="behance"
-                          >
-                            <i className="fab fa-behance" />
-                          </a>
+                          {socialLinks.map((social) => (
+                            <a
+                              key={social.title}
+                              href={social.href}
+                              target="blank"
+                              className="scrolla-element-anim-1"
+                              title={social.title}
+                            >
+                              <i className={social.icon} />
+                            </a>
+                          ))}
                         </div>
                         <div className="v-line-block">
                           <span />

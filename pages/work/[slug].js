@@ -3,12 +3,13 @@ import { useRouter } from "next/router";
 import { projectsData } from "../../src/data/projects";
 import Layout from "../../src/layouts/Layout";
 import { useEffect, useRef } from "react";
-import Isotope from "isotope-layout";
+// We will import Isotope dynamically inside useEffect
 
 const WorkSingle = () => {
   const router = useRouter();
   const { slug } = router.query;
-  const isotope = useRef();
+  const isotopeInstance = useRef(); // Changed ref name for clarity
+  const galleryRef = useRef(); // Ref for the gallery container
 
   // --- Data Logic ---
   const project = projectsData.find((p) => p.id === slug);
@@ -18,16 +19,42 @@ const WorkSingle = () => {
 
   // --- Gallery Logic ---
   useEffect(() => {
-    if (project) {
-      setTimeout(() => {
-        isotope.current = new Isotope(".m-gallery .row", {
-          itemSelector: ".col-xs-12",
-          percentPosition: true,
-          masonry: { columnWidth: ".col-xs-12" },
-        });
-      }, 500);
+    // Ensure this code only runs on the client side
+    if (project && typeof window !== "undefined" && galleryRef.current) {
+      // Dynamically import Isotope
+      import("isotope-layout").then((IsotopeModule) => {
+        const Isotope = IsotopeModule.default; // .default is usually needed for CJS modules
+
+        // Destroy previous instance if it exists
+        if (isotopeInstance.current) {
+          isotopeInstance.current.destroy();
+        }
+
+        // Initialize Isotope after a short delay
+        const timer = setTimeout(() => {
+          isotopeInstance.current = new Isotope(galleryRef.current, {
+            // Use the ref here
+            itemSelector: ".col-xs-12",
+            percentPosition: true,
+            masonry: { columnWidth: ".col-xs-12" },
+          });
+        }, 300); // Reduced delay, adjust if needed
+
+        return () => clearTimeout(timer); // Clear timeout if component unmounts quickly
+      });
     }
-  }, [project]);
+
+    // Cleanup function: This is CRUCIAL for preventing errors
+    return () => {
+      if (
+        isotopeInstance.current &&
+        typeof isotopeInstance.current.destroy === "function"
+      ) {
+        isotopeInstance.current.destroy();
+        isotopeInstance.current = null;
+      }
+    };
+  }, [project]); // Re-run when the project changes
 
   if (!project) {
     return (
@@ -102,8 +129,8 @@ const WorkSingle = () => {
       <section className="section section-inner">
         <div className="container">
           <div className="m-gallery">
-            <div className="row">
-              {/* Render the main project image FIRST */}
+            {/* Add ref to the gallery container for Isotope */}
+            <div className="row" ref={galleryRef}>
               <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <div className="works-item">
                   <div className="image">
@@ -121,7 +148,6 @@ const WorkSingle = () => {
                 </div>
               </div>
 
-              {/* THEN, render the rest of the images from the gallery array */}
               {project.gallery.map((image, index) => (
                 <div
                   key={index}

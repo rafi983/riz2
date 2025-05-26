@@ -1,17 +1,64 @@
 import dynamic from "next/dynamic";
 import Resume from "../src/components/Resume";
 import Layout from "../src/layouts/Layout";
-import Github from "./Github";
-import Techstack from "./TechStack";
-import Toolstack from "./ToolStack";
+import Github from "./Github"; // Assuming these are components in the pages folder
+import Techstack from "./TechStack"; // Assuming these are components in the pages folder
+import Toolstack from "./ToolStack"; // Assuming these are components in the pages folder
+import { useState } from "react";
 
 const PortfolioIsotope = dynamic(
   () => import("../src/components/PortfolioIsotope"),
   {
     ssr: false,
-  }
+  },
 );
+
 const Index = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [submissionStatus, setSubmissionStatus] = useState(null);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmissionStatus("submitting");
+
+    try {
+      const response = await fetch(
+        "https://formspree.io/f/mldbyove", // << YOUR FORMSPREE URL IS NOW HERE
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(formData),
+        },
+      );
+
+      if (response.ok) {
+        setSubmissionStatus("success");
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        setSubmissionStatus("error");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      setSubmissionStatus("error");
+    }
+  };
+
   return (
     <Layout pageClassName={"home"}>
       {/* Section - Hero Started */}
@@ -20,7 +67,6 @@ const Index = () => {
         id="started-section"
       >
         <div className="container">
-          {/* Hero Started */}
           <div className="lui-started v-line v-line-left">
             <div className="section hero-started">
               <div
@@ -90,26 +136,20 @@ const Index = () => {
                 <img
                   decoding="async"
                   src="https://riz82.netlify.app/assets/myImage-27584973.jpg"
-                  alt="<b>Zoé</b> Miller"
+                  alt="Rafi Zaman"
                 />
                 <span className="circle circle-1" />
                 <span
                   className="circle img-1"
-                  style={{
-                    backgroundImage: "url(assets/images/pat-1.png)",
-                  }}
+                  style={{ backgroundImage: "url(assets/images/pat-1.png)" }}
                 />
                 <span
                   className="circle img-2"
-                  style={{
-                    backgroundImage: "url(assets/images/pat-2.png)",
-                  }}
+                  style={{ backgroundImage: "url(assets/images/pat-2.png)" }}
                 />
                 <span
                   className="circle img-3"
-                  style={{
-                    backgroundImage: "url(assets/images/pat-2.png)",
-                  }}
+                  style={{ backgroundImage: "url(assets/images/pat-2.png)" }}
                 />
                 <div className="info-list">
                   <ul>
@@ -140,7 +180,6 @@ const Index = () => {
 
       {/* Section - Skills */}
       <section className="lui-section lui-gradient-center" id="skills-section">
-        {/* Heading */}
         <div className="lui-heading">
           <div className="container">
             <div className="m-titles align-center">
@@ -154,9 +193,7 @@ const Index = () => {
             </div>
           </div>
         </div>
-        {/* Skills */}
         <Techstack />
-
         <div className="lui-heading">
           <div className="container">
             <div className="m-titles align-center">
@@ -176,7 +213,6 @@ const Index = () => {
 
       {/* Section - Works */}
       <section className="lui-section lui-gradient-top" id="works-section">
-        {/* Heading */}
         <div className="lui-heading">
           <div className="container">
             <div className="m-titles align-center">
@@ -200,7 +236,6 @@ const Index = () => {
             </div>
           </div>
         </div>
-        {/* Works */}
         <div className="v-line v-line-right">
           <div className="container">
             <PortfolioIsotope />
@@ -213,9 +248,9 @@ const Index = () => {
 
       {/* Section - Resume */}
       <Resume />
+
       {/* Section - Contacts */}
       <section className="lui-section lui-gradient-bottom" id="contact-section">
-        {/* Heading */}
         <div className="lui-heading">
           <div className="container">
             <div className="m-titles align-center">
@@ -238,7 +273,6 @@ const Index = () => {
             </div>
           </div>
         </div>
-        {/* Contact */}
         <div className="lui-contacts v-line v-line-left">
           <div className="container">
             <div className="row">
@@ -309,18 +343,22 @@ const Index = () => {
                 >
                   <div
                     className="bg-img"
-                    style={{
-                      backgroundImage: "url(assets/images/pat-1.png)",
-                    }}
+                    style={{ backgroundImage: "url(assets/images/pat-1.png)" }}
                   />
                   <div className="contacts-form">
-                    <form onSubmit={(e) => e.preventDefault()} id="cform">
+                    <form onSubmit={handleSubmit} id="cform">
                       <div className="row">
                         <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                           <div className="group">
                             <label>
                               Your Full Name <b>*</b>
-                              <input type="text" name="name" />
+                              <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                required
+                              />
                             </label>
                           </div>
                         </div>
@@ -328,7 +366,13 @@ const Index = () => {
                           <div className="group">
                             <label>
                               Your Email Address <b>*</b>
-                              <input type="email" name="email" />
+                              <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                required
+                              />
                             </label>
                           </div>
                         </div>
@@ -336,7 +380,13 @@ const Index = () => {
                           <div className="group">
                             <label>
                               Your Subject <b>*</b>
-                              <input type="text" name="subject" />
+                              <input
+                                type="text"
+                                name="subject"
+                                value={formData.subject}
+                                onChange={handleInputChange}
+                                required
+                              />
                             </label>
                           </div>
                         </div>
@@ -344,7 +394,12 @@ const Index = () => {
                           <div className="group">
                             <label>
                               Your Message <b>*</b>
-                              <textarea name="message" defaultValue={""} />
+                              <textarea
+                                name="message"
+                                value={formData.message}
+                                onChange={handleInputChange}
+                                required
+                              />
                             </label>
                           </div>
                         </div>
@@ -352,19 +407,43 @@ const Index = () => {
                           <div className="terms-label">
                             * Accept the terms and conditions.
                           </div>
-                          <a
-                            href="#"
+                          <button
+                            type="submit"
                             className="btn"
-                            onclick="$('#cform').submit(); return false;"
+                            disabled={submissionStatus === "submitting"}
                           >
-                            <span>Send Message</span>
-                          </a>
+                            <span>
+                              {submissionStatus === "submitting"
+                                ? "Sending..."
+                                : "Send Message"}
+                            </span>
+                          </button>
                         </div>
                       </div>
                     </form>
-                    <div className="alert-success" style={{ display: "none" }}>
-                      <p>Thanks, your message is sent successfully.</p>
-                    </div>
+                    {submissionStatus === "success" && (
+                      <div
+                        className="alert-success"
+                        style={{ display: "block", marginTop: "20px" }}
+                      >
+                        <p>Thanks, your message is sent successfully.</p>
+                      </div>
+                    )}
+                    {submissionStatus === "error" && (
+                      <div
+                        className="alert-error"
+                        style={{
+                          display: "block",
+                          color: "red",
+                          marginTop: "20px",
+                        }}
+                      >
+                        <p>
+                          Oops! Something went wrong. Please try again or
+                          contact me directly via email.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

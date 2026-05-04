@@ -398,7 +398,39 @@ body.dark-skin {
 .dark-skin .portfolio-template .m-details .details-label > span,
 .dark-skin .portfolio-template .m-details .details-label strong,
 .dark-skin .portfolio-template .m-details .details-label strong span {
-  color: #111;
+  color: #fff;
+}
+
+.dark-skin.portfolio-template .section.section-inner.started-heading .m-title,
+.dark-skin .portfolio-template .section.section-inner.started-heading .m-title,
+.dark-skin .portfolio-template .post-content h4,
+.dark-skin .portfolio-template .post-content p,
+.dark-skin .portfolio-template .post-content li,
+.dark-skin .portfolio-template .m-details .details-label > span,
+.dark-skin .portfolio-template .m-details .details-label strong,
+.dark-skin .portfolio-template .m-details .details-label strong span,
+.dark-skin .portfolio-template .btn,
+.dark-skin .portfolio-template .btn span {
+  color: #fff !important;
+}
+
+.dark-skin.portfolio-template .post-content h1,
+.dark-skin.portfolio-template .post-content h2,
+.dark-skin.portfolio-template .post-content h3,
+.dark-skin.portfolio-template .post-content h4,
+.dark-skin.portfolio-template .post-content h5,
+.dark-skin.portfolio-template .post-content h6,
+.dark-skin.portfolio-template .post-content p,
+.dark-skin.portfolio-template .post-content li,
+.dark-skin.portfolio-template .post-content strong,
+.dark-skin.portfolio-template .post-content span,
+.dark-skin.portfolio-template .m-title,
+.dark-skin.portfolio-template .m-details .details-label > span,
+.dark-skin.portfolio-template .m-details .details-label strong,
+.dark-skin.portfolio-template .m-details .details-label strong span,
+.dark-skin.portfolio-template .btn,
+.dark-skin.portfolio-template .btn span {
+  color: #fff !important;
 }
 
 .dark-skin .lui-bgtitle {

@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST={"index.jsx -> ../src/components/PortfolioIsotope":{"id":"index.jsx -> ../src/components/PortfolioIsotope","files":["static/chunks/src_components_PortfolioIsotope_js.js"]}}
+self.__REACT_LOADABLE_MANIFEST={"index.jsx -> ../src/components/PortfolioIsotope":{"id":"index.jsx -> ../src/components/PortfolioIsotope","files":["static/chunks/src_components_PortfolioIsotope_js.js"]},"work\\[slug].js -> isotope-layout":{"id":"work\\[slug].js -> isotope-layout","files":["static/chunks/node_modules_isotope-layout_js_isotope_js.js"]}}

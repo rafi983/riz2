@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useRef } from "react";
 import { projectsData } from "../../src/data/projects";
 import Layout from "../../src/layouts/Layout";
-import { useEffect, useRef } from "react";
 // We will import Isotope dynamically inside useEffect
 
 const WorkSingle = () => {
@@ -19,33 +19,59 @@ const WorkSingle = () => {
 
   // --- Gallery Logic ---
   useEffect(() => {
-    // Ensure this code only runs on the client side
-    if (project && typeof window !== "undefined" && galleryRef.current) {
-      // Dynamically import Isotope
-      import("isotope-layout").then((IsotopeModule) => {
-        const Isotope = IsotopeModule.default; // .default is usually needed for CJS modules
-
-        // Destroy previous instance if it exists
-        if (isotopeInstance.current) {
-          isotopeInstance.current.destroy();
-        }
-
-        // Initialize Isotope after a short delay
-        const timer = setTimeout(() => {
-          isotopeInstance.current = new Isotope(galleryRef.current, {
-            // Use the ref here
-            itemSelector: ".col-xs-12",
-            percentPosition: true,
-            masonry: { columnWidth: ".col-xs-12" },
-          });
-        }, 300); // Reduced delay, adjust if needed
-
-        return () => clearTimeout(timer); // Clear timeout if component unmounts quickly
-      });
+    if (!project || typeof window === "undefined" || !galleryRef.current) {
+      return;
     }
 
-    // Cleanup function: This is CRUCIAL for preventing errors
+    let disposed = false;
+    const cleanupFns = [];
+
+    const initGallery = async () => {
+      const IsotopeModule = await import("isotope-layout");
+      const Isotope = IsotopeModule.default;
+
+      if (disposed || !galleryRef.current) return;
+
+      if (isotopeInstance.current) {
+        isotopeInstance.current.destroy();
+      }
+
+      isotopeInstance.current = new Isotope(galleryRef.current, {
+        itemSelector: ".gallery-item",
+        percentPosition: true,
+        masonry: { columnWidth: ".gallery-item" },
+      });
+
+      const relayout = () => {
+        if (isotopeInstance.current) {
+          isotopeInstance.current.layout();
+        }
+      };
+
+      const galleryImages = galleryRef.current.querySelectorAll("img");
+      galleryImages.forEach((img) => {
+        if (img.complete) return;
+
+        const handleLoad = () => relayout();
+        img.addEventListener("load", handleLoad);
+        img.addEventListener("error", handleLoad);
+        cleanupFns.push(() => {
+          img.removeEventListener("load", handleLoad);
+          img.removeEventListener("error", handleLoad);
+        });
+      });
+
+      window.addEventListener("resize", relayout);
+      cleanupFns.push(() => window.removeEventListener("resize", relayout));
+      relayout();
+    };
+
+    initGallery();
+
     return () => {
+      disposed = true;
+      cleanupFns.forEach((fn) => fn());
+
       if (
         isotopeInstance.current &&
         typeof isotopeInstance.current.destroy === "function"
@@ -131,7 +157,7 @@ const WorkSingle = () => {
           <div className="m-gallery">
             {/* Add ref to the gallery container for Isotope */}
             <div className="row" ref={galleryRef}>
-              <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <div className="gallery-item col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <div className="works-item">
                   <div className="image">
                     <div className="img">
@@ -151,7 +177,7 @@ const WorkSingle = () => {
               {project.gallery.map((image, index) => (
                 <div
                   key={index}
-                  className="col-xs-12 col-sm-6 col-md-6 col-lg-6"
+                  className="gallery-item col-xs-12 col-sm-6 col-md-6 col-lg-6"
                 >
                   <div className="works-item">
                     <div className="image">

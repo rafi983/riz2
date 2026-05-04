@@ -930,6 +930,17 @@ hr {
   max-width: 100%;
 }
 
+.preloader .spinner-logo .logotype__title {
+  display: block;
+  margin-bottom: 30px;
+  font-family: "Jost";
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 800;
+  white-space: nowrap;
+  color: #000;
+}
+
 .preloader .spinner.spinner-line {
   position: absolute;
   left: 0;
@@ -2105,12 +2116,12 @@ hr {
 }
 
 .section.hero-started .slide {
-  margin-top: -390px;
+  margin-top: -320px;
   position: absolute;
   top: 50%;
   right: -20px;
-  width: 680px;
-  height: 800px;
+  width: 560px;
+  height: 650px;
   z-index: 2;
 }
 
@@ -2120,8 +2131,15 @@ hr {
 
 @media screen and (min-width: 1700px) {
   .section.hero-started .slide {
-    margin-top: -400px;
+    margin-top: -310px;
     right: -50px;
+    width: 530px;
+    height: 620px;
+  }
+
+  .section.hero-started .slide .circle.circle-1 {
+    width: 530px;
+    height: 530px;
   }
 }
 
@@ -2147,8 +2165,8 @@ hr {
 }
 
 .section.hero-started .slide .circle.circle-1 {
-  width: 680px;
-  height: 680px;
+  width: 560px;
+  height: 560px;
   z-index: 2;
   background: #29a587;
   border-radius: 100%;

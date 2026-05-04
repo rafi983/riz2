@@ -1,10 +1,10 @@
 import dynamic from "next/dynamic";
+import { useState } from "react";
 import Resume from "../src/components/Resume";
 import Layout from "../src/layouts/Layout";
 import Github from "./Github"; // Assuming these are components in the pages folder
 import Techstack from "./TechStack"; // Assuming these are components in the pages folder
 import Toolstack from "./ToolStack"; // Assuming these are components in the pages folder
-import { useState } from "react";
 
 const PortfolioIsotope = dynamic(
   () => import("../src/components/PortfolioIsotope"),
@@ -135,21 +135,21 @@ const Index = () => {
               >
                 <img
                   decoding="async"
-                  src="https://riz82.netlify.app/assets/myImage-27584973.jpg"
+                  src="/assets/images/myImage.jpg"
                   alt="Rafi Zaman"
                 />
                 <span className="circle circle-1" />
                 <span
                   className="circle img-1"
-                  style={{ backgroundImage: "url(assets/images/pat-1.png)" }}
+                  style={{ backgroundImage: "url(/assets/images/pat-1.png)" }}
                 />
                 <span
                   className="circle img-2"
-                  style={{ backgroundImage: "url(assets/images/pat-2.png)" }}
+                  style={{ backgroundImage: "url(/assets/images/pat-2.png)" }}
                 />
                 <span
                   className="circle img-3"
-                  style={{ backgroundImage: "url(assets/images/pat-2.png)" }}
+                  style={{ backgroundImage: "url(/assets/images/pat-2.png)" }}
                 />
                 <div className="info-list">
                   <ul>
@@ -343,7 +343,7 @@ const Index = () => {
                 >
                   <div
                     className="bg-img"
-                    style={{ backgroundImage: "url(assets/images/pat-1.png)" }}
+                    style={{ backgroundImage: "url(/assets/images/pat-1.png)" }}
                   />
                   <div className="contacts-form">
                     <form onSubmit={handleSubmit} id="cform">

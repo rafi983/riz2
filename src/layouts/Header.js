@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Fragment, useEffect, useContext } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-import { linkClick, toggleMenu } from "../utils";
 import { menuItems, socialLinks } from "../data/navigation";
+import { linkClick, toggleMenu } from "../utils";
 
 const Header = () => {
   const { day, setDay } = useContext(ThemeContext);
@@ -18,15 +18,10 @@ const Header = () => {
         <div className="header__builder">
           <div className="row">
             <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <div className="logo">
+              <div className="logo logo-link">
                 <Link href="/" legacyBehavior>
                   <a>
-                    <img
-                      width={228}
-                      height={38}
-                      src="/assets/images/logo2.png"
-                      alt="logo"
-                    />
+                    <span className="logotype__title">RafiZ.</span>
                   </a>
                 </Link>
               </div>
